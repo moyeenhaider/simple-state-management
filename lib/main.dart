@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'page/taste_screen.dart';
+import 'page/task_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,10 +13,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Taste',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TasteScreen(),
+      home: TaskScreen(true),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

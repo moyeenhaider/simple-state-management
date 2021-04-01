@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:taste/models/task.dart';
 import 'package:taste/state/observable.dart';
 import 'package:taste/state/observer.dart';
+import 'package:taste/stream_page/todo_page.dart';
 
-class TasteScreen extends StatelessWidget {
+class TaskScreen extends StatelessWidget {
+  final bool isWire;
+  TaskScreen(this.isWire);
   final obs = Observable();
 
   openAddTask(_) {
@@ -19,16 +22,23 @@ class TasteScreen extends StatelessWidget {
                 Center(
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("ADD TASK"),
+                  child: Text(
+                    "ADD TASK",
+                    style: TextStyle(fontSize: 24, color: Colors.indigo),
+                  ),
                 )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     controller: taskController,
-                    decoration: InputDecoration(labelText: "Your Task"),
+                    decoration: InputDecoration(
+                      labelText: "Your Task",
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
                 RaisedButton(
+                  color: Colors.indigo,
                   onPressed: () {
                     if (taskController.text.isEmpty) return;
                     obs
@@ -37,7 +47,8 @@ class TasteScreen extends StatelessWidget {
                     taskController.clear();
                     Navigator.of(context).pop();
                   },
-                  child: Text("Add Task"),
+                  child:
+                      Text("Add Task", style: TextStyle(color: Colors.white)),
                 )
               ],
             ),
@@ -52,6 +63,20 @@ class TasteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Tasks"),
+        // backgroundColor: Colors.indigo,
+        actions: [
+          Switch(
+              value: !isWire,
+              onChanged: (value) {
+                if (isWire) {
+                  Navigator.pushReplacement(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new TodoStreamPage(true)));
+                }
+              })
+        ],
       ),
       body: Column(
         children: [
@@ -69,16 +94,25 @@ class TasteScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: ListTile(
-                      tileColor: Colors.grey,
-                      title: Text(obs.data.tasks[index].name),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          obs
-                            ..data.tasks.removeAt(index)
-                            ..notify();
-                        },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: ListTile(
+                        tileColor: Colors.blueGrey,
+                        title: Text(
+                          obs.data.tasks[index].name,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            obs
+                              ..data.tasks.removeAt(index)
+                              ..notify();
+                          },
+                        ),
                       ),
                     ),
                   );

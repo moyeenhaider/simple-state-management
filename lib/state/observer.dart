@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:taste/state/observable.dart';
 
 class Observer extends StatefulWidget {
